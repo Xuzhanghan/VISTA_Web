@@ -45,7 +45,8 @@
           <div class="test-head">
             <h3>点击执行测试</h3>
             <div>
-              <el-button class="test-button" type="success" @click="step">测试</el-button>
+              <el-button class="test-button" type="success" @click="step">逐步测试</el-button>
+              <el-button class="test-button" type="success" @click="autoTest">一键测试</el-button>
             </div>
           </div>
           <el-table class="test-data-table" :data="testData" style="width: 90%" max-height="530px">
@@ -60,8 +61,8 @@
                 <el-image class="table-cover" :src="scope.row.screenshot_withbbox"/>
               </template>
             </el-table-column>
-            <el-table-column label="目标" prop="next_actions.intent"></el-table-column>
-            <el-table-column label="操作类型" prop="next_actions['action-type']"></el-table-column>
+            <el-table-column label="目标" :width="140" prop="next_actions.intent"></el-table-column>
+            <el-table-column label="操作类型" :width="140" prop="next_actions['action-type']"></el-table-column>
             <el-table-column label="Widget ID" :width="120" prop="next_actions['target-widget-id']"></el-table-column>
           </el-table>
         </div>
@@ -146,6 +147,13 @@ const onCancelConfig=()=>{
   console.log(scenario_extra_info.value)
 }
 const step=()=>{
+  ElMessage(
+      {
+        message:'测试进行中',
+        type:'warning',
+        center:true
+      }
+  )
   StepInfo().then(res=>{
     if(res.status===201){
       ElMessage({
@@ -161,7 +169,7 @@ const step=()=>{
       })
     }else if(res.status===200){
       console.log(res)
-      testData.value.push(res)
+      testData.value.push(res.data)
     }
   }).catch(()=>{
     ElMessage({
@@ -169,19 +177,64 @@ const step=()=>{
       type:'error',
       center:true
     })
-    const newData = {
-      next_actions: {
-        "action-type": "touch",
-        intent: "copy translated text",
-        "target-widget-id": 19,
-      },
-      screenshot: "http://clyra-project.oss-cn-nanjing.aliyuncs.com/b.png",
-      screenshot_withbbox: "http://clyra-project.oss-cn-nanjing.aliyuncs.com/b.png"
-    };
-
-    // 向 tableData 中添加新数据
-    testData.value.push(newData);
+    // const newData = {
+    //   next_actions: {
+    //     "action-type": "touch",
+    //     intent: "copy translated text",
+    //     "target-widget-id": 19,
+    //   },
+    //   screenshot: "http://clyra-project.oss-cn-nanjing.aliyuncs.com/b.png",
+    //   screenshot_withbbox: "http://clyra-project.oss-cn-nanjing.aliyuncs.com/b.png"
+    // };
+    //
+    // // 向 tableData 中添加新数据
+    // testData.value.push(newData);
   })
+}
+const status = ref(200);
+
+const checkStatus = async () => {
+  status.value=200
+  try {
+    while (status.value === 200) {
+      const res = await StepInfo(); // 等待异步操作完成
+
+      if (res.status === 201) {
+        status.value = res.status;
+        ElMessage({
+          message: '测试结束！',
+          type: 'success',
+          center: true
+        });
+      } else if (res.status === 202) {
+        status.value = res.status;
+        ElMessage({
+          message: '测试失败！请重新测试！',
+          type: 'warning',
+          center: true
+        });
+      } else if (res.status === 200) {
+        status.value = res.status;
+        console.log(res);
+        testData.value.push(res.data);
+      }
+    }
+  } catch (error) {
+    status.value = 500;
+    console.log(status.value);
+    ElMessage.error("初始化错误！");
+  }
+};
+
+
+const autoTest=()=>{
+  ElMessage({
+    message:'自动化测试开始',
+    type:'warning',
+    center:true
+  })
+  // 启动异步检查
+  checkStatus();
 }
 </script>
 
