@@ -12,24 +12,24 @@
         <div class="config-form">
           <h3>请填写测试配置信息</h3>
           <div>
-            <el-form :model="configInfo" label-width="180px" class="config-info">
-              <el-form-item required="required" label="app name:">
-                <el-input v-model="configInfo.app_name" placeholder="请输入待测app的名称" clearable/>
+            <el-form :model="configInfo" label-width="100px" class="config-info">
+              <el-form-item required="required" label="软件名称">
+                <el-input v-model="configInfo.app_name" style="width: 200px" placeholder="请输入待测app的名称" clearable/>
               </el-form-item>
-              <el-form-item required="required" label="app package:">
-                <el-input v-model="configInfo.app_package" placeholder="请输入待测软件包" clearable/>
+              <el-form-item required="required" label="软件包">
+                <el-input v-model="configInfo.app_package" style="width: 200px" placeholder="请输入待测软件包" clearable/>
               </el-form-item>
-              <el-form-item required="required" label="app launch activity:">
-                <el-input v-model="configInfo.app_launch_activity" placeholder="请输入活动信息" clearable/>
+              <el-form-item required="required" label="活动信息">
+                <el-input v-model="configInfo.app_launch_activity" style="width: 200px" placeholder="请输入活动信息" clearable/>
               </el-form-item>
-              <el-form-item required="required" label="scenario name:">
-                <el-input v-model="configInfo.scenario_name" placeholder="请输入场景名称" clearable/>
+              <el-form-item required="required" label="场景名称">
+                <el-input v-model="configInfo.scenario_name" style="width: 200px" placeholder="请输入场景名称" clearable/>
               </el-form-item>
-              <el-form-item required="required" label="scenario description:">
-                <el-input v-model="configInfo.scenario_description" placeholder="请输入场景描述" clearable/>
+              <el-form-item required="required" label="场景描述">
+                <el-input v-model="configInfo.scenario_description" style="width: 200px" placeholder="请输入场景描述" clearable/>
               </el-form-item>
               <el-form-item label="场景补充信息">
-                <el-input clearable type="textarea" :autosize="{ minRows:6, maxRows: 7 }" v-model="scenario_extra_info" placeholder="【选填】请以key:value形式输入并用逗号隔开,如         source-language:English,target-language:Chinese"/>
+                <el-input clearable type="textarea" style="width: 200px" :autosize="{ minRows:6, maxRows: 7 }" v-model="scenario_extra_info" placeholder="【选填】请以key:value形式输入并用逗号隔开,"/>
               </el-form-item>
               <el-form-item class="config-button">
                 <el-button style="width: 90px" type="primary" @click="onSubmitConfig">确认提交</el-button>
@@ -49,7 +49,7 @@
               <el-button class="test-button" type="success" @click="autoTest">一键测试</el-button>
             </div>
           </div>
-          <el-table class="test-data-table" :data="testData" style="width: 90%" max-height="530px">
+          <el-table class="test-data-table" :data="testData" style="width: 90%" max-height="600px">
             <el-table-column fixed type="index"/>
             <el-table-column fixed :width="160" label="截图">
               <template #default="scope">
@@ -61,8 +61,8 @@
                 <el-image class="table-cover" :src="scope.row.screenshot_withbbox"/>
               </template>
             </el-table-column>
-            <el-table-column label="目标" :width="140" prop="next_actions.intent"></el-table-column>
-            <el-table-column label="操作类型" :width="140" prop="next_actions['action-type']"></el-table-column>
+            <el-table-column label="目标" :width="180" prop="next_actions.intent"></el-table-column>
+            <el-table-column label="操作类型" :width="180" prop="next_actions['action-type']"></el-table-column>
             <el-table-column label="Widget ID" :width="120" prop="next_actions['target-widget-id']"></el-table-column>
           </el-table>
         </div>
@@ -177,18 +177,18 @@ const step=()=>{
       type:'error',
       center:true
     })
-    // const newData = {
-    //   next_actions: {
-    //     "action-type": "touch",
-    //     intent: "copy translated text",
-    //     "target-widget-id": 19,
-    //   },
-    //   screenshot: "http://clyra-project.oss-cn-nanjing.aliyuncs.com/b.png",
-    //   screenshot_withbbox: "http://clyra-project.oss-cn-nanjing.aliyuncs.com/b.png"
-    // };
-    //
-    // // 向 tableData 中添加新数据
-    // testData.value.push(newData);
+    const newData = {
+      next_actions: {
+        "action-type": "touch",
+        intent: "copy translated text",
+        "target-widget-id": 19,
+      },
+      screenshot: "http://clyra-project.oss-cn-nanjing.aliyuncs.com/b.png",
+      screenshot_withbbox: "http://clyra-project.oss-cn-nanjing.aliyuncs.com/b.png"
+    };
+
+    // 向 tableData 中添加新数据
+    testData.value.push(newData);
   })
 }
 const status = ref(200);
@@ -245,46 +245,34 @@ const autoTest=()=>{
 .r-container {
   width: 100%;
   height: 100vh;
-  background-image: url("@/assets/background.png");
-  background-size: cover; /* 背景图片覆盖整个区域 */
-  background-position: center; /* 居中对齐背景 */
-  background-repeat: no-repeat; /* 不重复背景 */
-}
-.overlay {
-  position: absolute; /* 绝对定位，覆盖整个背景 */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.3); /* 半透明遮罩，黑色，50%透明 */
-  z-index: 1; /* 确保遮罩层在背景图片上方 */
+
 }
 .header {
+  height: 10%;
   z-index: 3;
   text-align: center;
-  margin-bottom: 20px;
-  color: white;
-  padding: 30px;
+  padding-bottom: 5px;
+  padding-top: 20px;
+  border-bottom: 2px solid #F7F8FC; /* 添加横线 */
 }
 .main-content {
   display: flex;
   justify-content: space-between;
+  height: 90%;
 }
 .left-sidebar {
-  width: 45%;
+  width: 25%;
   z-index: 4;
+  background-color: #F7F8FC;
+  height: 100%;
 }
-.config-form{
-  width:600px;
-  height: 650px;
-  background-color: rgba(255, 255, 255, 0.5);
-  margin-left:120px;
-  border-radius: 20px;
-  z-index: 5;
+/* 全局调整字体大小 */
+.el-table td {
+  font-size: 16px; /* 你可以根据需要调整字体大小 */
 }
+
 .config-form h3{
   padding: 20px;
-  color: #4D4D4D;
 }
 .config-form .el-form-item {
   display: flex;
@@ -303,18 +291,13 @@ const autoTest=()=>{
   margin-left: 10px;
 }
 .right-sidebar {
-  width: 45%;
-  padding-left: 20px;
+  width: 80%;
+  padding-left: 130px;
   z-index: 4;
   justify-content: center;
 }
 .test-steps{
-  width:650px;
-  height: 650px;
-  background-color: rgba(255, 255, 255, 0.5);
-  margin-right: 90px;
-  border-radius: 20px;
-  z-index: 5;
+  width: 950px;
 }
 .test-steps h3{
   padding: 20px;
