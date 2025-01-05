@@ -188,7 +188,7 @@ const step=()=>{
     };
 
     // 向 tableData 中添加新数据
-    testData.value.push(newData);
+    //testData.value.push(newData);
   })
 }
 const status = ref(200);
