@@ -161,12 +161,16 @@ const step=()=>{
         type:'success',
         center:true
       })
+      console.log(res)
+      testData.value.push(res.data)
     }else if(res.status===202){
       ElMessage({
         message:'测试失败！请重新测试！',
         type:'warning',
         center:true
       })
+      console.log(res)
+      testData.value.push(res.data)
     }else if(res.status===200){
       console.log(res)
       testData.value.push(res.data)
