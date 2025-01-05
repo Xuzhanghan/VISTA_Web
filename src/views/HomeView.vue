@@ -210,6 +210,8 @@ const checkStatus = async () => {
           type: 'success',
           center: true
         });
+        console.log(res)
+        testData.value.push(res.data)
       } else if (res.status === 202) {
         status.value = res.status;
         ElMessage({
@@ -217,6 +219,8 @@ const checkStatus = async () => {
           type: 'warning',
           center: true
         });
+        console.log(res)
+        testData.value.push(res.data)
       } else if (res.status === 200) {
         status.value = res.status;
         console.log(res);
